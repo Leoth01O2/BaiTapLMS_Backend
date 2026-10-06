@@ -1,0 +1,4 @@
+truy vấn cũ dùng YEAR(created_at) và MONTH(created_at) nên Mysql phải xử lý hàm trên cột created_at rồi mới so sánh. cách này làm index trên created_at khó được sử dụng và có thể dẫn tới type ALL, tức quét toàn bảng.
+sau khi tạo index idx_type_date(transaction_type,created_at) và đổi điều kiện ngày sang khoảng từ 2026-06-01 đến trước 2026-07-01 thì Mysql có thể dùng index để tìm dữ liệu.
+khi đó possible_keys và key có thể hiện idx_type_date, type thường chuyển sang range hoặc ref và số rows cần đọc giảm xuống.
+số rows cụ thể còn phụ thuộc dữ liệu thực tế trong bảng nên không cố định.
