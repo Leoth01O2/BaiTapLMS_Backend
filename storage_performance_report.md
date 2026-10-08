@@ -1,0 +1,5 @@
+bảng Posts đang có quá nhiều index nên khi insert một bài viết mới Mysql không chỉ thêm dữ liệu vào bảng mà còn phải cập nhật các index tương ứng.
+idx_content tốn khá nhiều dung lượng vì content là dữ liệu text dài. idx_post_type chỉ có 3 giá trị TEXT, IMAGE, VIDEO còn idx_is_visible chỉ có 0 và 1 nên cardinality thấp, khả năng lọc dữ liệu không cao.
+vì vậy xóa 3 index idx_content, idx_post_type và idx_is_visible. giữ lại idx_user_id vì thường cần tìm bài viết theo user và idx_created_at để lấy bài viết theo thời gian.
+trước và sau khi xóa có thể kiểm tra data_length và index_length trong information_schema.TABLES để so sánh dung lượng. số liệu thực tế phụ thuộc dữ liệu đang có trong bảng.
+việc có nhiều index giúp một số truy vấn select nhanh hơn nhưng insert, update, delete sẽ chậm hơn vì Mysql phải cập nhật thêm các cây index. sau khi bỏ 3 index không cần thiết thì mỗi lần insert cũng giảm được 3 lần cập nhật index.
